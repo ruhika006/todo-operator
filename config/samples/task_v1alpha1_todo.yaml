@@ -1,0 +1,10 @@
+apiVersion: task.example.com/v1alpha1
+kind: Todo
+metadata:
+  labels:
+    app.kubernetes.io/name: todo-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: todo-sample
+spec:
+  title: task-1
+  id: 1

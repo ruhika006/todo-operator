@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- task_v1alpha1_todo.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples
