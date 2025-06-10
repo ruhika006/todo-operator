@@ -30,12 +30,12 @@ type TodoSpec struct {
 
 	// Foo is an example field of Todo. Edit todo_types.go to remove/update
 	Title string `json:"title,omitempty"`
-	ID    int    `json:"id,omitempty"`
 }
 
 // TodoStatus defines the observed state of Todo.
 type TodoStatus struct {
-	Title string `json:"title,omitempty"`
+	ID        int                `json:"id,omitempty"`
+	Condition []metav1.Condition `json:"conditions,omitempty"`
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
