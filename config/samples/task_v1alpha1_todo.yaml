@@ -4,7 +4,6 @@ metadata:
   labels:
     app.kubernetes.io/name: todo-operator
     app.kubernetes.io/managed-by: kustomize
-  name: todo-sample
+  name: todo-sample-1
 spec:
   title: task-1
-  id: 1

@@ -19,6 +19,8 @@ package main
 import (
 	"crypto/tls"
 	"flag"
+	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -37,6 +39,7 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
+	v1 "github.com/crossplane/crossplane-tools/api/v1"
 	taskv1alpha1 "github.com/crossplane/crossplane-tools/api/v1alpha1"
 	"github.com/crossplane/crossplane-tools/internal/controller"
 	// +kubebuilder:scaffold:imports
@@ -56,6 +59,14 @@ func init() {
 
 // nolint:gocyclo
 func main() {
+
+	if os.Args[1]=="server"{
+		mux:= v1.Request()
+		fmt.Println("starting http server")
+		http.ListenAndServe(":8080", mux)
+		return
+	}
+
 	var metricsAddr string
 	var metricsCertPath, metricsCertName, metricsCertKey string
 	var webhookCertPath, webhookCertName, webhookCertKey string
