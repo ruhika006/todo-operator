@@ -57,7 +57,7 @@ const finalizer = "todo.task.example.com"
 
 const CONDITION_STATUS_TRUE = metav1.ConditionTrue
 const CONDITION_STATUS_FALSE = metav1.ConditionFalse
-
+const CONDITION_STATUS_UNKNOWN = metav1.ConditionUnknown
 
 // Upate the existing condition in Status, 
 // only if it matches the type of the Incoming Condition, 
@@ -148,7 +148,7 @@ func (r *TodoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 	if !ctrlutil.ContainsFinalizer(todo, finalizer) {
 		ctrlutil.AddFinalizer(todo, finalizer)
 		if err := r.Update(ctx, todo); err != nil {
-			return ctrl.Result{Requeue: true}, err
+			return ctrl.Result{}, err
 		}
 	}
 
@@ -156,6 +156,10 @@ func (r *TodoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 	apiTodos, err := v1.ListTodos()
 	if err != nil {
 		l.Error(err, "Failed to list API Todos")
+		todo.Status.Condition = AppendCondition(ctx, todo, "Reconciled", CONDITION_STATUS_UNKNOWN, "FailedReconciliation", err.Error())
+		if serr := r.Status().Update(ctx, todo); serr != nil {
+			return ctrl.Result{}, serr
+		}
 		return ctrl.Result{}, err
 	}
 
@@ -190,7 +194,7 @@ func (r *TodoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.
 	
 	todo.Status.Condition = AppendCondition(ctx, todo, "Reconciled", CONDITION_STATUS_TRUE, "SuccessfulReconciliation", "Successfully reconciled the Todo custom resource.")
 	if err := r.Status().Update(ctx, todo); err != nil {
-		return ctrl.Result{Requeue: true}, err
+		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil
