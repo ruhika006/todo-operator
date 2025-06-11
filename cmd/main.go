@@ -60,12 +60,13 @@ func init() {
 // nolint:gocyclo
 func main() {
 
-	if os.Args[1]=="server"{
+	if len(os.Args)>1 && os.Args[1]=="server"{
 		mux:= v1.Request()
 		fmt.Println("starting http server")
 		http.ListenAndServe(":8080", mux)
 		return
 	}
+
 
 	var metricsAddr string
 	var metricsCertPath, metricsCertName, metricsCertKey string
